@@ -33,6 +33,12 @@ var rootCmd = &cobra.Command{
 	Use: "hype",
 	Short: "A pretty *hype* CLI to help convert Markdown to hypertext markup" +
 		" language (HTML)",
+	Run: func(cmd *cobra.Command, args []string) {
+		err := cmd.Usage()
+		if err != nil {
+			panic(err)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
