@@ -17,6 +17,10 @@ go get -v github.com/austintraver/hype@latest
 
 ## Usage
 
+`hype` accepts subcommands, including those documented below:
+
+### `convert`
+
 Using `hype` to convert a Markdown file into HTML can be performed using the
 `convert` subcommand, whose usage is as follows:
 
@@ -30,6 +34,26 @@ Alternatively, input and output file locations can be specified using the `-i`
 ```shell script
 hype convert -i input.md -o output.html
 ```
+
+
+### `preview`
+
+If you are actively editing a Markdown file, you may want to view its rendered
+contents in a web browser. You can do this using the `preview` subcommand,
+which launches an HTTP server running on port `1411` hosting rendered previews 
+of any Markdown files contained in the current directory, or a custom root
+specified using the `--root` flag. 
+
+The usage of the `preview` subcommand is as follows:
+
+```shell script
+hype preview --root ./public
+```
+
+If file `draft.md` was located at `./public/draft`, you can see an HTML
+rendering of the file by visiting `http://localhost:1411/draft.md`
+
+If a file was located
 
 ## Configuration
 
