@@ -1,21 +1,31 @@
-# hype
+# `hype`
 
 ## Introduction
 
-`hype` is a Markdown utility tool for the command-line interface. Hype can be
-used to convert Markdown to HTML using the `convert` subcommand, as follows:
+`hype` is a CLI utility to help convert Markdown into HTML.
+
+## Installation
+
+As a Go module, `hype` can be installed like any traditional Go package.
+
+```shell script
+go install github.com/austintraver/hype
+```
 
 ## Usage
 
+Using `hype` to convert a Markdown file into HTML can be performed using the
+`convert` subcommand, whose usage is as follows:
+
 ```shell script
-hype convert < input.md > output.md
+hype convert < input.md
 ```
 
 Alternatively, input and output file locations can be specified using the `-i`
 (`--input`) and `-o` (`--output`) flags respectively. For example:
 
 ```shell script
-hype convert -i input.md -o output.md
+hype convert -i input.md -o output.html
 ```
 
 ## Configuration

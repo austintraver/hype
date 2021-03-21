@@ -5,7 +5,7 @@
     <parameters value="convert" />
     <kind value="PACKAGE" />
     <filePath value="$PROJECT_DIR$/cmd/convert.go" />
-    <package value="hype" />
+    <package value="github.com/austintraver/hype" />
     <directory value="$PROJECT_DIR$" />
     <redirect_input value="true" />
     <input_file value="$USER_HOME$/Desktop/test.md" />

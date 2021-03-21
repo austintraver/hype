@@ -1,4 +1,4 @@
-module hype
+module github.com/austintraver/hype
 
 go 1.16
 
