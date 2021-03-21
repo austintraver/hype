@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test Conversion" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="hype" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="convert" />
+    <kind value="PACKAGE" />
+    <filePath value="$PROJECT_DIR$/cmd/convert.go" />
+    <package value="hype" />
+    <directory value="$PROJECT_DIR$" />
+    <redirect_input value="true" />
+    <input_file value="$USER_HOME$/Desktop/test.md" />
+    <method v="2" />
+  </configuration>
+</component>
