@@ -74,10 +74,7 @@ func init() {
 		"verbose",
 		"v",
 		verbose,
-		fmt.Sprintf(
-			"ignore extensions to Markdown syntax \n (default %v)",
-			verbose,
-		),
+		"outputs logging information to the console",
 	)
 	err := viper.BindPFlags(rootCmd.Flags())
 	if err != nil {
