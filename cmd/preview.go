@@ -29,52 +29,38 @@ Launches a server listening on port 1411.
 Usage: access file FILE within directory DIR by visiting the following URL:
 http://localhost:1411/FILE`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var dir string
 		var err error
-		if len(args) == 0 {
-			// Get the current directory
-			dir, err = os.Getwd()
+		if len(args) != 0 {
+			err := cmd.Usage()
 			if err != nil {
 				panic(err)
 			}
-		} else {
-			// Get the current directory as input
-			dir = args[0]
-			_, err = os.Stat(dir)
-			if errors.Is(err, os.ErrNotExist) {
-				message := fmt.Sprintf(
-					"hype: unable to find directory \"%v\"\n",
-					dir,
-				)
-				_, err = os.Stderr.WriteString(message)
-				if err != nil {
-					panic(err)
-				}
-				return
-			}
 		}
-		http.FileServer(http.Dir(dir))
+		port = viper.GetInt("port")
 
 		// Register a handler for the HTTP server
 		http.HandleFunc("/", handleIt)
 
-		address := fmt.Sprintf(":%v", viper.GetInt("port"))
-
-		fmt.Printf(
-			"Listening for connections on port :%v\n",
-			color.BlueString(fmt.Sprintf("%v", viper.GetInt("port"))),
-		)
+		address := fmt.Sprintf(":%v", port)
 
 		rootDir, err = filepath.Abs(viper.GetString("root"))
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf(
-			"Serving files under root directory: %v\n",
-			color.YellowString(rootDir),
-		)
 
-		// Begin listening on port 1411
+		if verbose {
+			fmt.Printf(
+				"Listening for connections on port " +
+					color.BlueString(fmt.Sprintf(":%v", viper.GetInt("port"))) +
+					"\n",
+			)
+			fmt.Printf(
+				"Serving files under root directory: %v\n",
+				color.YellowString(rootDir),
+			)
+		}
+
+		// Begin listening for client connections to the HTTP server
 		log.Fatal(http.ListenAndServe(address, http.HandlerFunc(handleIt)))
 	},
 }
@@ -82,12 +68,14 @@ http://localhost:1411/FILE`,
 // handleIt handles the current HTTP request
 func handleIt(writer http.ResponseWriter, request *http.Request) {
 
-	// When we receive a new request, notify the client
-	fmt.Printf(
-		"Received request for file %v from host %v",
-		color.YellowString(request.RequestURI),
-		color.BlueString(request.RemoteAddr),
-	)
+	if verbose {
+		// When we receive a new request, notify the client
+		fmt.Printf(
+			"Received request for file %v from host %v",
+			color.YellowString(request.RequestURI),
+			color.BlueString(request.RemoteAddr),
+		)
+	}
 
 	ifile := path.Join(
 		rootDir,
