@@ -1,20 +1,11 @@
-/*
-Copyright © 2021 Austin Traver <atraver@usc.edu>
-It's open source, so make a *copy*, right?
-*/
 package cmd
 
 import (
-	"bytes"
 	"fmt"
-	"github.com/spf13/viper"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
-	"github.com/yuin/goldmark/parser"
-	"github.com/yuin/goldmark/renderer"
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // inputFile represents the filepath to the input file
@@ -26,24 +17,27 @@ var outputFile string
 // force determines whether output should overwrite existing files
 var force bool
 
-// basic determines whether extensions to Markdown syntax are ignored
-var basic bool
-
-// convertCmd represents the convert command
+// convertCmd represents the command to convert Markdown into HTML
 var convertCmd = &cobra.Command{
 	Use:   "convert [FILE]",
 	Short: "Transform Markdown into HTML",
 	Run:   handleConvert,
 }
 
-// handleConvert converts Markdown provided from input
-// into HTML, and writes it to output
-
-// the underlying conversion from Markdown to HTML
+// handleConvert receives Markdown provided as input and outputs it as HTML
 func handleConvert(cmd *cobra.Command, args []string) {
+	stat, _ := os.Stdin.Stat()
+	if (stat.Mode()&os.ModeCharDevice) != 0 && len(args) > 0 {
+		inputFile = args[0]
+	} else {
+		inputFile = viper.GetString("input")
+	}
+
+	// If the user supplied one argument, assume it is the name
+	// of the file to be converted from Markdown to HTML
 
 	// Confirm that the path to the file actually exists
-	_, err := os.Stat(inputFile)
+	_, err := os.Stat(viper.GetString("input"))
 	if os.IsNotExist(err) {
 		message := fmt.Sprintf(
 			"hype: file %s not found",
@@ -56,61 +50,32 @@ func handleConvert(cmd *cobra.Command, args []string) {
 	}
 
 	// Confirm that the path to the output file does not already exist
-	_, err = os.Stat(outputFile)
+	_, err = os.Stat(viper.GetString("output"))
 	if outputFile != os.Stdout.Name() {
-		if os.IsExist(err) && !(force) {
+		if os.IsExist(err) && !(viper.GetBool("force")) {
 			message := fmt.Sprintf(
-				"error: file %s already exists, use --force to overwrite",
+				"hype: file %s already exists, use --force to overwrite",
 				outputFile,
 			)
 			_, err = os.Stderr.WriteString(message)
 			if err != nil {
 				panic(err)
 			}
+			return
 		}
 	}
-
 	// Read Markdown from the input file
-	input, err := os.ReadFile(inputFile)
+	markdown, err := os.ReadFile(inputFile)
 	if err != nil {
 		panic(err)
 	}
-
-	// Initialize a list of extensions and options for the Markdown parser
-	var extensions = []goldmark.Extender{
-		extension.GFM,
-		extension.DefinitionList,
-		extension.Footnote,
-	}
-	var parserOptions = []parser.Option{
-		parser.WithAutoHeadingID(),
-	}
-	var rendererOptions []renderer.Option
-
-	// If the user specified to use basic Markdown syntax,
-	// remove support for the popular extensions that are by default
-	// included
-	if viper.Get("basic") == true {
-		// if basic == true {
-		extensions = nil
-		parserOptions = nil
-		rendererOptions = nil
-	}
-
-	// Construct the markdown interface
-	converter := goldmark.New(
-		goldmark.WithExtensions(extensions...),
-		goldmark.WithParserOptions(parserOptions...),
-		goldmark.WithRendererOptions(rendererOptions...),
-	)
-	var html bytes.Buffer
-	err = converter.Convert(input, &html)
+	html, err := Convert(markdown)
 	if err != nil {
 		panic(err)
 	}
 
 	// Write the resultant HTML to the output file
-	err = os.WriteFile(outputFile, html.Bytes(), 644)
+	err = os.WriteFile(outputFile, html, 644)
 	if err != nil {
 		panic(err)
 	}
@@ -118,6 +83,7 @@ func handleConvert(cmd *cobra.Command, args []string) {
 
 func init() {
 	rootCmd.AddCommand(convertCmd)
+	convertCmd.Flags().SortFlags = false
 	convertCmd.Flags().StringVarP(
 		&inputFile,
 		"input",
@@ -139,13 +105,6 @@ func init() {
 		force,
 		"allow output to overwrite a file if it already exists "+
 			"(default: false)",
-	)
-	convertCmd.Flags().BoolVarP(
-		&basic,
-		"basic",
-		"b",
-		basic,
-		"ignore extensions to Markdown syntax (default: false)",
 	)
 
 	err := viper.BindPFlags(convertCmd.Flags())

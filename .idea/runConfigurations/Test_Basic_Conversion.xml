@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test Conversion" type="GoApplicationRunConfiguration" factoryName="Go Application">
+  <configuration default="false" name="Test Basic Conversion" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="hype" />
     <working_directory value="$PROJECT_DIR$" />
     <parameters value="convert -i test/test.md" />

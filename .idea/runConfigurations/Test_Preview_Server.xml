@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test Conversion" type="GoApplicationRunConfiguration" factoryName="Go Application">
+  <configuration default="false" name="Test Preview Server" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="hype" />
     <working_directory value="$PROJECT_DIR$" />
-    <parameters value="convert -i test/test.md" />
+    <parameters value="preview --root test" />
     <kind value="PACKAGE" />
-    <filePath value="$PROJECT_DIR$/cmd/convert.go" />
+    <filePath value="$PROJECT_DIR$" />
     <package value="github.com/austintraver/hype" />
     <directory value="$PROJECT_DIR$" />
     <method v="2" />
