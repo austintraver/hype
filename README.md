@@ -12,7 +12,7 @@
 As a Go module, `hype` can be installed like any traditional Go package.
 
 ```shell script
-go install github.com/austintraver/hype
+go get -v github.com/austintraver/hype@latest
 ```
 
 ## Usage
