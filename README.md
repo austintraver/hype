@@ -12,7 +12,7 @@
 As a Go module, `hype` can be installed like any traditional Go package.
 
 ```shell script
-go get -v github.com/austintraver/hype@latest
+go install github.com/austintraver/hype
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ go get -v github.com/austintraver/hype@latest
 ### `convert`
 
 Using `hype` to convert a Markdown file into HTML can be performed using the
-`convert` subcommand, whose usage is as follows:
+`convert` subcommand, for example:
 
 ```shell script
 hype convert < input.md
