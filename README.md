@@ -12,17 +12,48 @@
 As a Go module, `hype` can be installed like any traditional Go package.
 
 ```shell script
-go install github.com/austintraver/hype
+go install github.com/austintraver/hype@latest
 ```
 
 ## Usage
 
-`hype` accepts subcommands, including those documented below:
+`hype` accepts subcommands, some of which are documented below.
+
+* Getting help for `hype`:
+
+  ```shell
+  hype --help
+  ```
+  
+  Output
+  
+  ```text
+  A pretty *hype* CLI to help convert Markdown to hypertext markup language (HTML)
+
+  Usage:
+    hype [flags]
+    hype [command]
+
+  Available Commands:
+    convert     Transform Markdown into HTML
+    help        Help about any command
+    preview     Preview the Markdown files within directory DIR in a web browser
+
+  Flags:
+    -b, --basic           ignore extensions to Markdown syntax 
+                           (default false)
+    -c, --config string   user configuration file 
+                           (default "${XDG_CONFIG_HOME}/hyperc.yaml")
+    -v, --verbose         outputs logging information to the console
+    -h, --help            help for hype
+
+  Use "hype [command] --help" for more information about a command.
+  ```
 
 ### `convert`
 
 Using `hype` to convert a Markdown file into HTML can be performed using the
-`convert` subcommand, for example:
+`convert` subcommand, whose usage is as follows:
 
 ```shell script
 hype convert < input.md
