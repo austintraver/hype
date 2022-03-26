@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -74,11 +75,21 @@ func handleConvert(cmd *cobra.Command, args []string) {
 		panic(err)
 	}
 
-	// Write the resultant HTML to the output file
-	err = os.WriteFile(outputFile, html, 644)
+	// Write the resultant output to the output file
+	err = os.MkdirAll(filepath.Dir(outputFile), 0755)
 	if err != nil {
 		panic(err)
 	}
+	err = os.MkdirAll(filepath.Dir(inputFile), 0755)
+	if err != nil {
+		panic(err)
+	}
+	err = os.WriteFile(outputFile, html, 0644)
+	if err != nil {
+		panic(err)
+	}
+	return
+
 }
 
 func init() {
@@ -106,6 +117,9 @@ func init() {
 		"allow output to overwrite a file if it already exists "+
 			"(default: false)",
 	)
+
+	// Print verbose command line help
+	convertCmd.Flags().BoolP("verbose", "v", false, "print verbose output")
 
 	err := viper.BindPFlags(convertCmd.Flags())
 	if err != nil {
