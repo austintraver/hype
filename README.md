@@ -11,8 +11,15 @@
 
 As a Go module, `hype` can be installed like any traditional Go package.
 
-```shell script
+```shell
 go install github.com/austintraver/hype@latest
+```
+
+If you'd like to install shell completions for `zsh`, also use the `completions` subcommand:
+
+```shell
+# Or any other directory contained within the ${fpath} array.
+hype completion zsh > ${XDG_CONFIG_HOME}/zsh/functions/_hype
 ```
 
 ## Usage
